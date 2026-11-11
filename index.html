@@ -1,5 +1,4 @@
-```python
-html_content = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -225,58 +224,3 @@ html_content = '''<!DOCTYPE html>
                     Promoción de hábitos de vida saludables, acondicionamiento físico, torneos deportivos y aprovechamiento del tiempo libre.
                 </p>
                 <div class="bg-white/80 pop-card p-3 rounded-xl text-xs font-bold mb-4">
-                    💪 ¡Inscríbete en el Gimnasio de tu Centro de Formación!
-                </div>
-            </div>
-            <a href="https://senafitnes.site/" target="_blank" class="bg-black text-white text-center font-black py-2 rounded-xl pop-btn block text-sm">
-                Inscripción Gimnasio SENA <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
-            </a>
-        </section>
-
-    </main>
-
-    <!-- Galería de Imágenes Institucionales -->
-    <section class="max-w-6xl mx-auto px-4 mt-12">
-        <div class="bg-white pop-card rounded-2xl p-6">
-            <h2 class="text-2xl font-black uppercase text-center mb-6 font-comic">
-                📸 Galería Institucional SENA
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <!-- Imagen 1 -->
-                <div class="pop-card bg-amber-100 rounded-xl p-4 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" alt="Aprendices SENA" class="rounded-lg border-2 border-black h-48 object-cover w-full">
-                </div>
-
-                <!-- Imagen 2 -->
-                <div class="pop-card bg-cyan-100 rounded-xl p-4 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" alt="Deporte y Actividad Física SENA" class="rounded-lg border-2 border-black h-48 object-cover w-full">
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="max-w-6xl mx-auto px-4 mt-8 text-center text-white font-bold text-sm">
-        <p>SENA - Centro de Tecnología de la Manufactura y la Producción Industrial (CTPI)</p>
-    </footer>
-
-    <!-- Script de Filtro / Búsqueda -->
-    <script>
-        function filterCards() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('searchable-card');
-
-            for (let i = 0; i < cards.length; i++) {
-                let cardText = cards[i].innerText.toLowerCase();
-                if (cardText.includes(input)) {
-                    cards[i].style.display = "flex";
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }
-        }
-    </script>
-</body>
-</html>
