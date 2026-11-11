@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienestar al Aprendiz SENA - Parque Temático & Rayuela</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        senaGreen: '#39A900',
+                        popPurple: '#7B61FF',
+                        popPink: '#FF598F',
+                        popOrange: '#FF5E36',
+                        popYellow: '#FFD200',
+                        popCyan: '#00E5FF',
+                        popBg: '#8C96A6',
+                        darkComic: '#18181B'
+                    },
+                    fontFamily: {
+                        comic: ['Fredoka', 'sans-serif'],
+                        body: ['Outfit', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'comic': '5px 5px 0px #18181B',
+                        'comic-lg': '8px 8px 0px #18181B',
+                        'comic-xl': '12px 12px 0px #18181B',
+                        'comic-hover': '2px 2px 0px #18181B',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Textura Halftone Pop Art de la Ilustración Urbana */
+        .halftone-pattern {
+            background-color: #8C96A6;
+            background-image: radial-gradient(#636E80 22%, transparent 22%);
+            background-size: 18px 18px;
+        }
+
+        /* Trazos de tiza/rayuela */
+        .hopscotch-path {
+            background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15) 15px, transparent 15px, transparent 30px);
+        }
+
+        /* Animación Ticket Feria */
+        @keyframes bounceTicket {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+        .animate-ticket {
+            animation: bounceTicket 3s infinite ease-in-out;
+        }
+
+        /* Animación suave para modales */
+        @keyframes popIn {
+            0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-pop {
+            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #18181B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF5E36;
+            border: 3px solid #18181B;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body class="halftone-pattern font-body text-darkComic min-h-screen flex flex-col justify-between selection:bg-popYellow selection:text-darkComic">
+
+    <!-- CABECERA PRINCIPAL TIPO TAQUILLA DEL PARQUE -->
+    <header class="w-full bg-popPurple border-b-8 border-darkComic p-4 md:p-6 sticky top-0 z-40 shadow-comic-lg">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+            
+            <!-- Logo & Título del Parque -->
+            <div class="flex items-center gap-3 text-center lg:text-left">
+                <div class="bg-popYellow p-3 rounded-2xl border-4 border-darkComic shadow-comic animate-ticket">
+                    <i class="fa-solid fa-ticket text-3xl text-darkComic"></i>
+                </div>
+                <div>
+                    <h1 class="font-comic text-2xl md:text-4xl font-black text-white drop-shadow-[0_4px_0_#18181B] tracking-wide">
+                        BIENESTAR AL APRENDIZ SENA
+                    </h1>
+                    <p class="text-xs md:text-sm font-semibold text-popYellow uppercase tracking-wider bg-darkComic px-2 py-0.5 rounded-md inline-block">
+                        🎡 PARQUE TEMÁTICO & RUTA RAYUELA FORMATIVA
+                    </p>
+                </div>
+            </div>
+
+            <!-- Buscador en tiempo real -->
+            <div class="w-full lg:w-96 relative">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        onkeyup="searchCards()" 
+                        placeholder="🔍 Buscar p.ej. Inscripción, Póliza, Gimnasio..." 
+                        class="w-full pl-11 pr-4 py-3 bg-white font-semibold border-4 border-darkComic rounded-xl shadow-comic focus:outline-none focus:ring-4 focus:ring-popCyan text-darkComic placeholder-gray-500 transition-all text-sm md:text-base"
+                    >
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-lg text-darkComic"></i>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN RÁPIDA DE ZONAS (JUMP BUTTONS) -->
+    <section class="bg-popYellow border-b-4 border-darkComic py-3 px-4 shadow-comic">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-xs font-black uppercase tracking-wider text-darkComic mb-2 text-center md:text-left flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot"></i> NAVEGACIÓN RÁPIDA DE ATRACCIONES:
+            </p>
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs font-comic font-bold">
+                <button onclick="scrollToSection('sec-que-es')" class="bg-white hover:bg-popCyan border-2 border-darkComic px-3 py-1.5 rounded-lg shadow-comic-hover transition-all">
+                    1. ¿Qué es Bienestar?
+                </button>
+                <button onclick="scrollToSection('sec-apoyos')" class="bg-white hover:bg-popPink hover:text-white border-2 border-darkComic px-3 py-1.5 rounded-lg shadow-comic-hover transition-all">
+                    2. Apoyos e Inscripción SENA
+                </button>
+                <button onclick="scrollToSection('sec-monitorias')" class="bg-white hover:bg-popOrange hover:text-white border-2 border-darkComic px-3 py-1.5 rounded-lg shadow-comic-hover transition-all">
+                    3. Monitorías
+                </button>
+                <button onclick="scrollToSection('sec-poliza')" class="bg-white hover:bg-senaGreen hover:text-white border-2 border-darkComic px-3 py-1.5 rounded-lg shadow-comic-hover transition-all">
+                    4. Póliza de Seguro
+                </button>
+                <button onclick="scrollToSection('sec-zona-segura')" class="bg-white hover:bg-popPurple hover:text-white border-2 border-darkComic px-3 py-1.5 rounded-lg shadow-comic-hover transition-all">
+                    5. Zona Segura & Salud
+                </button>
+                <button onclick="scrollToSection('sec-gimnasio')" class="bg-white hover:bg-popCyan border-2 border-darkComic px-3 py-1.5 rounded-lg shadow-comic-hover transition-all">
+                    6. Gimnasio & Deporte
+                </button>
+                <button onclick="scrollToSection('sec-galeria')" class="bg-darkComic text-popYellow hover:bg-black border-2 border-darkComic px-3 py-1.5 rounded-lg shadow-comic-hover transition-all">
+                    📸 Galería Institucional
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTAINER PRINCIPAL -->
+    <main class="max-w-7xl mx-auto px-4 py-8 w-full flex-grow">
+
+        <!-- BANNER URBANO DE BIENVENIDA ESTILO POP-ART -->
+        <div class="bg-white border-8 border-darkComic rounded-3xl p-6 md:p-8 mb-12 shadow-comic-xl relative">
+            <!-- Badges decorativos ajustados dentro del contenedor -->
+            <div class="flex flex-wrap gap-2 mb-4 md:mb-0 md:absolute md:-top-4 md:right-6">
+                <div class="bg-popPink text-white font-comic text-xs font-black px-3 py-1.5 border-4 border-darkComic md:rotate-3 shadow-comic rounded-xl">
+                    ¡ENFOQUE TERRITORIAL Y DIFERENCIAL! 🎨
+                </div>
+                <div class="bg-popCyan text-darkComic font-comic text-xs font-black px-3 py-1.5 border-4 border-darkComic md:-rotate-2 shadow-comic rounded-xl">
+                    MODALIDADES: PRESENCIAL / VIRTUAL / A DISTANCIA
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-6 mt-2 md:mt-4">
+                <div class="w-24 h-24 md:w-32 md:h-32 bg-popOrange rounded-full border-4 border-darkComic flex items-center justify-center flex-shrink-0 shadow-comic animate-pulse">
+                    <i class="fa-solid fa-ferris-wheel text-5xl text-white"></i>
+                </div>
+                <div>
+                    <span class="bg-popYellow text-darkComic font-comic text-xs font-bold px-3 py-1 rounded-full border-2 border-darkComic uppercase">
+                        Ruta de Formación Integral SENA
+                    </span>
+                    <h2 class="font-comic text-2xl md:text-4xl font-extrabold text-darkComic mt-2">
+                        ¡Bienvenido a la Ruta Interactiva del Aprendiz!
+                    </h2>
+                    <p class="text-gray-700 text-sm md:text-base mt-2 font-medium leading-relaxed">
+                        Explora las <b>6 casillas de la Rayuela Temática</b> para conocer las oportunidades, beneficios, seguro contra accidentes, convocatorias de sostenimiento y espacios deportivos que garantizan tu permanencia y graduación exitosa.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TÍTULO DE LA RAYUELA -->
+        <div class="text-center mb-8">
+            <h3 class="font-comic text-3xl md:text-4xl font-black text-white inline-block bg-darkComic px-6 py-3 rounded-2xl border-4 border-popYellow shadow-comic uppercase tracking-wider">
+                🎯 CASILLAS DE LA RAYUELA TEMÁTICA
+            </h3>
+        </div>
+
+        <!-- MAPA / CASILLAS DE LA RAYUELA EN GRID INTERACTIVO -->
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 hopscotch-path p-4 rounded-3xl border-4 border-dashed border-white">
+
+            <!-- CASILLA 1: QUÉ ES BIENESTAR -->
+            <div id="sec-que-es" class="attraction-card bg-popPurple rounded-3xl border-4 border-darkComic shadow-comic-lg hover:shadow-comic-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col justify-between overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-comic text-3xl font-black bg-popYellow text-darkComic w-12 h-12 rounded-2xl border-4 border-darkComic flex items-center justify-center shadow-comic">
+                            1
+                        </span>
+                        <span class="bg-darkComic text-white font-comic text-xs px-3 py-1 rounded-full border-2 border-white">
+                            Fundamentación
+                        </span>
+                    </div>
+                    <h4 class="font-comic text-2xl font-black text-white mb-3">
+                        ¿Qué es Bienestar al Aprendiz?
+                    </h4>
+                    <p class="text-white text-sm font-medium line-clamp-4 leading-relaxed">
+                        Estrategia institucional para contribuir en la permanencia y el desempeño exitoso de los aprendices en su proceso formativo con enfoque territorial y diferencial.
+                    </p>
+                </div>
+                <div class="p-6 pt-0">
+                    <button onclick="openModal('modal-que-es')" class="w-full bg-popYellow hover:bg-yellow-300 text-darkComic font-comic font-black py-3 px-4 rounded-xl border-4 border-darkComic shadow-comic hover:shadow-comic-hover transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-eye"></i> EXPLORAR DETALLES
+                    </button>
+                </div>
+            </div>
+
+            <!-- CASILLA 2: APOYOS SOCIOECONÓMICOS E INSCRIPCIÓN SENA -->
+            <div id="sec-apoyos" class="attraction-card bg-popPink rounded-3xl border-4 border-darkComic shadow-comic-lg hover:shadow-comic-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col justify-between overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-comic text-3xl font-black bg-popCyan text-darkComic w-12 h-12 rounded-2xl border-4 border-darkComic flex items-center justify-center shadow-comic">
+                            2
+                        </span>
+                        <span class="bg-darkComic text-popPink font-comic text-xs px-3 py-1 rounded-full border-2 border-white">
+                            Subsidios & SOFIA Plus
+                        </span>
+                    </div>
+                    <h4 class="font-comic text-2xl font-black text-white mb-3">
+                        Apoyos e Inscripciones SENA
+                    </h4>
+                    <p class="text-white text-sm font-medium line-clamp-4 leading-relaxed">
+                        Inscripciones a Apoyos de Sostenimiento (Regular, FIC, Alimentación, Transporte, Plan de Datos). Conoce los requisitos en SOFIA Plus y los canales de postulación.
+                    </p>
+                </div>
+                <div class="p-6 pt-0 space-y-2">
+                    <button onclick="openModal('modal-apoyos')" class="w-full bg-popCyan hover:bg-cyan-300 text-darkComic font-comic font-black py-2.5 px-4 rounded-xl border-4 border-darkComic shadow-comic transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-hand-holding-dollar"></i> REQUISITOS Y APOYOS
+                    </button>
+                    <!-- ENLACE REAL DE INSCRIPCIÓN -->
+                    <a 
+                        href="https://oferta.senasofiaplus.edu.co/sofia-oferta/inscripcion-apoyo-sostenimiento.html" 
+                        target="_blank" 
+                        class="w-full bg-popYellow hover:bg-yellow-300 text-darkComic font-comic font-black py-2.5 px-4 rounded-xl border-4 border-darkComic shadow-comic transition-all flex items-center justify-center gap-2 text-xs"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> INSCRIPCIÓN SOFIA PLUS
+                    </a>
+                </div>
+            </div>
+
+            <!-- CASILLA 3: MONITORÍAS -->
+            <div id="sec-monitorias" class="attraction-card bg-popOrange rounded-3xl border-4 border-darkComic shadow-comic-lg hover:shadow-comic-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col justify-between overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-comic text-3xl font-black bg-popYellow text-darkComic w-12 h-12 rounded-2xl border-4 border-darkComic flex items-center justify-center shadow-comic">
+                            3
+                        </span>
+                        <span class="bg-darkComic text-popOrange font-comic text-xs px-3 py-1 rounded-full border-2 border-white">
+                            Excelencia Académica
+                        </span>
+                    </div>
+                    <h4 class="font-comic text-2xl font-black text-white mb-3">
+                        ¿Qué son las Monitorías?
+                    </h4>
+                    <p class="text-white text-sm font-medium line-clamp-4 leading-relaxed">
+                        Reconocimiento al esfuerzo en el proceso formativo y apoyo económico para aprendices destacados en liderazgo, investigación, ámbito social y tecnológico.
+                    </p>
+                </div>
+                <div class="p-6 pt-0">
+                    <button onclick="openModal('modal-monitorias')" class="w-full bg-popYellow hover:bg-yellow-300 text-darkComic font-comic font-black py-3 px-4 rounded-xl border-4 border-darkComic shadow-comic hover:shadow-comic-hover transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-award"></i> VER CONVOCATORIA
+                    </button>
+                </div>
+            </div>
+
+            <!-- CASILLA 4: PÓLIZA ESTUDIANTIL -->
+            <div id="sec-poliza" class="attraction-card bg-senaGreen rounded-3xl border-4 border-darkComic shadow-comic-lg hover:shadow-comic-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col justify-between overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-comic text-3xl font-black bg-popPink text-white w-12 h-12 rounded-2xl border-4 border-darkComic flex items-center justify-center shadow-comic">
+                            4
+                        </span>
+                        <span class="bg-darkComic text-senaGreen font-comic text-xs px-3 py-1 rounded-full border-2 border-white">
+                            Cobertura Accidentes 24/7
+                        </span>
+                    </div>
+                    <h4 class="font-comic text-2xl font-black text-white mb-3">
+                        Póliza Estudiantil SENA
+                    </h4>
+                    <p class="text-white text-sm font-medium line-clamp-4 leading-relaxed">
+                        Seguro contra accidentes personales que ampara a los aprendices matriculados. Incluye atención médica de urgencias, invalidez y servicio de ambulancia.
+                    </p>
+                </div>
+                <div class="p-6 pt-0">
+                    <button onclick="openModal('modal-poliza')" class="w-full bg-popPink hover:bg-pink-400 text-white font-comic font-black py-3 px-4 rounded-xl border-4 border-darkComic shadow-comic hover:shadow-comic-hover transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> COBERTURAS Y SEGURO
+                    </button>
+                </div>
+            </div>
+
+            <!-- CASILLA 5: ZONA SEGURA Y SALUD -->
+            <div id="sec-zona-segura" class="attraction-card bg-popCyan rounded-3xl border-4 border-darkComic shadow-comic-lg hover:shadow-comic-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col justify-between overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-comic text-3xl font-black bg-popPurple text-white w-12 h-12 rounded-2xl border-4 border-darkComic flex items-center justify-center shadow-comic">
+                            5
+                        </span>
+                        <span class="bg-darkComic text-popCyan font-comic text-xs px-3 py-1 rounded-full border-2 border-white">
+                            Salud Mental & Física
+                        </span>
+                    </div>
+                    <h4 class="font-comic text-2xl font-black text-darkComic mb-3">
+                        Línea Zona Segura SENA
+                    </h4>
+                    <p class="text-darkComic font-medium text-sm line-clamp-4 leading-relaxed">
+                        Acompañamiento en prevención de la enfermedad, primeros auxilios psicológicos, desarrollo de habilidades blandas y hábitos de vida saludables.
+                    </p>
+                </div>
+                <div class="p-6 pt-0 space-y-2">
+                    <button onclick="openModal('modal-zona-segura')" class="w-full bg-popPurple hover:bg-purple-600 text-white font-comic font-black py-2.5 px-4 rounded-xl border-4 border-darkComic shadow-comic transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-heart-pulse"></i> DETALLES ZONA SEGURA
+                    </button>
+                    <!-- ENLACE REAL PORTAL SENA -->
+                    <a 
+                        href="https://www.sena.edu.co/la-entidad/familia-sena/bienestar-aprendiz" 
+                        target="_blank" 
+                        class="w-full bg-darkComic hover:bg-black text-popCyan font-comic font-black py-2.5 px-4 rounded-xl border-4 border-darkComic shadow-comic transition-all flex items-center justify-center gap-2 text-xs"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> PORTAL OFICIAL BIENESTAR
+                    </a>
+                </div>
+            </div>
+
+            <!-- CASILLA 6: GIMNASIO Y DEPORTE -->
+            <div id="sec-gimnasio" class="attraction-card bg-popYellow rounded-3xl border-4 border-darkComic shadow-comic-lg hover:shadow-comic-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col justify-between overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-comic text-3xl font-black bg-popOrange text-white w-12 h-12 rounded-2xl border-4 border-darkComic flex items-center justify-center shadow-comic">
+                            6
+                        </span>
+                        <span class="bg-darkComic text-popYellow font-comic text-xs px-3 py-1 rounded-full border-2 border-white">
+                            Acondicionamiento Físico
+                        </span>
+                    </div>
+                    <h4 class="font-comic text-2xl font-black text-darkComic mb-3">
+                        Gimnasio & Deporte SENA
+                    </h4>
+                    <p class="text-darkComic font-medium text-sm line-clamp-4 leading-relaxed">
+                        Promoción de la actividad física, uso del gimnasio institucional, torneos deportivos, arte y aprovechamiento del tiempo libre.
+                    </p>
+                </div>
+                <div class="p-6 pt-0">
+                    <button onclick="openModal('modal-gimnasio')" class="w-full bg-popOrange hover:bg-orange-500 text-white font-comic font-black py-3 px-4 rounded-xl border-4 border-darkComic shadow-comic hover:shadow-comic-hover transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-dumbbell"></i> INSCRIPCIÓN AL GIMNASIO
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SECCIÓN DE GALERÍA CON IMÁGENES REALES Y ATRIBUCIÓN OBLIGATORIA CON ENLACES REALES -->
+        <section id="sec-galeria" class="bg-white border-8 border-darkComic rounded-3xl p-6 md:p-8 shadow-comic-xl mb-12">
+            <div class="flex flex-col md:flex-row items-center justify-between border-b-4 border-darkComic pb-4 mb-6 gap-2">
+                <h3 class="font-comic text-2xl md:text-3xl font-black text-darkComic flex items-center gap-3">
+                    <i class="fa-solid fa-camera-retro text-popPink"></i> Galería de la Comunidad SENA
+                </h3>
+                <span class="bg-popYellow text-darkComic font-comic text-xs font-bold px-3 py-1 rounded-full border-2 border-darkComic">
+                    Fotos Oficiales & Enlaces Verificados
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Tarjeta Imagen 1 -->
+                <div class="bg-gray-50 border-4 border-darkComic rounded-2xl overflow-hidden shadow-comic flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-purple-100 overflow-hidden relative group">
+                            <img 
+                                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" 
+                                alt="Aprendices SENA en formación integral" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            >
+                            <span class="absolute bottom-2 left-2 bg-darkComic text-popYellow font-comic text-xs px-2 py-1 rounded">
+                                Bienestar Integral
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-comic font-bold text-base text-darkComic mb-1">
+                                Desarrollo Socioemocional y Liderazgo
+                            </h4>
+                            <p class="text-xs text-gray-600 mb-3">
+                                Talleres de habilidades blandas, integración cultural y apoyo psicosocial a nivel nacional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Imagen 2 -->
+                <div class="bg-gray-50 border-4 border-darkComic rounded-2xl overflow-hidden shadow-comic flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-pink-100 overflow-hidden relative group">
+                            <img 
+                                src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80" 
+                                alt="Convocatoria de apoyos de sostenimiento SENA" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            >
+                            <span class="absolute bottom-2 left-2 bg-darkComic text-popCyan font-comic text-xs px-2 py-1 rounded">
+                                Apoyos & Becas
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-comic font-bold text-base text-darkComic mb-1">
+                                Apoyos de Sostenimiento FIC y Regular
+                            </h4>
+                            <p class="text-xs text-gray-600 mb-3">
+                                Convocatorias periódicas adjudicadas a aprendices matriculados en SOFIA Plus.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Imagen 3 -->
+                <div class="bg-gray-50 border-4 border-darkComic rounded-2xl overflow-hidden shadow-comic flex flex-col justify-between">
+                    <div>
+                        <div class="h-48 bg-cyan-100 overflow-hidden relative group">
+                            <img 
+                                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" 
+                                alt="Gimnasio y deporte SENA" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            >
+                            <span class="absolute bottom-2 left-2 bg-darkComic text-popOrange font-comic text-xs px-2 py-1 rounded">
+                                Actividad Física
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-comic font-bold text-base text-darkComic mb-1">
+                                Actividad Física y Gimnasios SENA
+                            </h4>
+                            <p class="text-xs text-gray-600 mb-3">
+                                Espacios deportivos orientados a promover hábitos de vida saludable en la comunidad.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER ESTILO CÓMIC -->
+    <footer class="w-full bg-darkComic text-white border-t-8 border-popYellow p-6 text-center">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-senaGreen rounded-lg flex items-center justify-center font-black text-darkComic">
+                    S
+                </div>
+                <span class="font-comic text-lg font-bold text-popYellow">Servicio Nacional de Aprendizaje SENA</span>
+            </div>
+            <p class="text-xs text-gray-400">
+                Estrategia Institucional de Bienestar al Aprendiz | República de Colombia
+            </p>
+            <a href="https://www.sena.edu.co" target="_blank" class="bg-popOrange text-white font-comic text-xs font-bold px-4 py-2 rounded-xl border-2 border-white hover:bg-popYellow hover:text-darkComic transition-colors">
+                www.sena.edu.co
+            </a>
+        </div>
+    </footer>
+
+    <!-- ==================== MODALES DETALLADOS ==================== -->
+
+    <!-- MODAL 1: QUÉ ES BIENESTAR -->
+    <div id="modal-que-es" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border-8 border-darkComic rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-comic-xl animate-pop relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-que-es')" class="absolute top-4 right-4 bg-popPink text-white font-black w-10 h-10 rounded-full border-4 border-darkComic hover:bg-red-600 transition-colors flex items-center justify-center text-xl shadow-comic">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-popPurple text-white font-comic text-sm font-black px-3 py-1 rounded-lg border-2 border-darkComic">
+                    CASILLA 1
+                </span>
+                <h3 class="font-comic text-2xl md:text-3xl font-black text-darkComic">
+                    ¿Qué es Bienestar al Aprendiz SENA?
+                </h3>
+            </div>
+            
+            <div class="space-y-4 text-sm md:text-base text-gray-800">
+                <p class="bg-purple-100 border-l-4 border-popPurple p-4 rounded-r-xl font-medium">
+                    Es una estrategia institucional para contribuir en la permanencia y el desempeño exitoso de los aprendices de la entidad en su proceso formativo con enfoque territorial y diferencial.
+                </p>
+
+                <h4 class="font-comic text-lg font-black text-darkComic mt-4">
+                    🎯 Objetivos Estratégicos:
+                </h4>
+                <ul class="space-y-2 text-xs md:text-sm">
+                    <li class="flex items-start gap-2 bg-gray-50 p-3 rounded-xl border-2 border-darkComic">
+                        <span class="bg-popYellow text-darkComic font-bold px-2 py-0.5 rounded border border-darkComic text-xs mt-0.5">1</span>
+                        <span><b>Objetivo 1:</b> Implementar estrategias de acompañamiento para el desarrollo integral del aprendiz en su proceso formativo.</span>
+                    </li>
+                    <li class="flex items-start gap-2 bg-gray-50 p-3 rounded-xl border-2 border-darkComic">
+                        <span class="bg-popYellow text-darkComic font-bold px-2 py-0.5 rounded border border-darkComic text-xs mt-0.5">2</span>
+                        <span><b>Objetivo 2:</b> Incentivar al aprendiz en su proceso de formación profesional integral mediante la implementación de un programa de estímulos.</span>
+                    </li>
+                    <li class="flex items-start gap-2 bg-gray-50 p-3 rounded-xl border-2 border-darkComic">
+                        <span class="bg-popYellow text-darkComic font-bold px-2 py-0.5 rounded border border-darkComic text-xs mt-0.5">3</span>
+                        <span><b>Objetivo 3:</b> Entregar con oportunidad y calidad los servicios de bienestar al aprendiz documentando procedimientos que soporten una operación ágil y flexible.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: APOYOS E INSCRIPCIONES SENA -->
+    <div id="modal-apoyos" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border-8 border-darkComic rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-comic-xl animate-pop relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-apoyos')" class="absolute top-4 right-4 bg-popPink text-white font-black w-10 h-10 rounded-full border-4 border-darkComic hover:bg-red-600 transition-colors flex items-center justify-center text-xl shadow-comic">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-popPink text-white font-comic text-sm font-black px-3 py-1 rounded-lg border-2 border-darkComic">
+                    CASILLA 2
+                </span>
+                <h3 class="font-comic text-2xl md:text-3xl font-black text-darkComic">
+                    Apoyos Socioeconómicos e Inscripciones
+                </h3>
+            </div>
+
+            <p class="text-xs md:text-sm text-gray-700 font-medium mb-4">
+                Los apoyos socioeconómicos son un incentivo para la permanencia de aprendices de programas laborales y tecnológicos presenciales, virtuales y a distancia.
+            </p>
+
+            <h4 class="font-comic font-bold text-darkComic text-base mb-2">📋 Lista de Apoyos Socioeconómicos:</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-xs">
+                <div class="bg-pink-50 border-2 border-darkComic p-2.5 rounded-xl font-bold">💵 Apoyo Regular (Mensual)</div>
+                <div class="bg-pink-50 border-2 border-darkComic p-2.5 rounded-xl font-bold">🏗️ Fondo FIC (Construcción)</div>
+                <div class="bg-pink-50 border-2 border-darkComic p-2.5 rounded-xl font-bold">🥗 Subsidio Alimentario</div>
+                <div class="bg-pink-50 border-2 border-darkComic p-2.5 rounded-xl font-bold">🚌 Apoyo de Transporte</div>
+                <div class="bg-pink-50 border-2 border-darkComic p-2.5 rounded-xl font-bold">📶 Plan de Datos Móviles</div>
+                <div class="bg-pink-50 border-2 border-darkComic p-2.5 rounded-xl font-bold">🏠 Centros de Convivencia</div>
+            </div>
+
+            <h4 class="font-comic font-bold text-darkComic text-base mb-2">✅ Requisitos Generales de Inscripción:</h4>
+            <ul class="list-disc pl-5 text-xs text-gray-700 space-y-1 mb-6">
+                <li>Estar matriculado en un programa de Formación Titulada (Técnico o Tecnólogo).</li>
+                <li>Pertenecer a estratos socioeconómicos 1 o 2 o estar registrado en el SISBEN.</li>
+                <li>No tener contrato de aprendizaje vigente ni ser beneficiario de otros apoyos simultáneos.</li>
+                <li>No tener sanciones disciplinarias vigentes en el SENA.</li>
+            </ul>
+
+            <!-- BOTÓN OFICIAL CON URL REAL -->
+            <div class="bg-popYellow/40 border-4 border-darkComic p-4 rounded-2xl text-center shadow-comic">
+                <p class="font-comic font-bold text-darkComic text-sm mb-2">
+                    ¿Quieres inscribirte a las convocatorias vigentes?
+                </p>
+                <a 
+                    href="https://oferta.senasofiaplus.edu.co/sofia-oferta/inscripcion-apoyo-sostenimiento.html" 
+                    target="_blank" 
+                    class="inline-block bg-popOrange hover:bg-orange-600 text-white font-comic font-black text-sm py-3 px-6 rounded-xl border-4 border-darkComic shadow-comic transition-all"
+                >
+                    🚀 IR AL FORMULARIO DE INSCRIPCIÓN SOFIA PLUS
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: MONITORÍAS -->
+    <div id="modal-monitorias" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border-8 border-darkComic rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-comic-xl animate-pop relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-monitorias')" class="absolute top-4 right-4 bg-popPink text-white font-black w-10 h-10 rounded-full border-4 border-darkComic hover:bg-red-600 transition-colors flex items-center justify-center text-xl shadow-comic">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-popOrange text-white font-comic text-sm font-black px-3 py-1 rounded-lg border-2 border-darkComic">
+                    CASILLA 3
+                </span>
+                <h3 class="font-comic text-2xl md:text-3xl font-black text-darkComic">
+                    ¿Qué son las Monitorías SENA?
+                </h3>
+            </div>
+
+            <p class="bg-orange-50 border-l-4 border-popOrange p-4 rounded-r-xl font-medium text-sm text-gray-800 mb-4">
+                Son acciones de acompañamiento a los aprendices destacando la excelencia formativa y brindando un estímulo económico mediante la adjudicación socioeconómica e institucional.
+            </p>
+
+            <h4 class="font-comic text-base font-black text-darkComic mb-2">
+                ⭐ Ejes de Participación:
+            </h4>
+            <div class="grid grid-cols-2 gap-2 mb-4 text-xs">
+                <div class="bg-yellow-100 border-2 border-darkComic p-3 rounded-xl font-bold text-center">👑 Liderazgo Formativo</div>
+                <div class="bg-yellow-100 border-2 border-darkComic p-3 rounded-xl font-bold text-center">🌐 Proyección Social</div>
+                <div class="bg-yellow-100 border-2 border-darkComic p-3 rounded-xl font-bold text-center">📚 Apoyo Académico</div>
+                <div class="bg-yellow-100 border-2 border-darkComic p-3 rounded-xl font-bold text-center">💡 Talentos e Innovación</div>
+            </div>
+
+            <p class="text-xs text-gray-600">
+                Consulta los plazos y convocatorias de monitorías directamente con el profesional de Bienestar de tu Centro de Formación.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL 4: PÓLIZA ESTUDIANTIL -->
+    <div id="modal-poliza" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border-8 border-darkComic rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-comic-xl animate-pop relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-poliza')" class="absolute top-4 right-4 bg-popPink text-white font-black w-10 h-10 rounded-full border-4 border-darkComic hover:bg-red-600 transition-colors flex items-center justify-center text-xl shadow-comic">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-senaGreen text-white font-comic text-sm font-black px-3 py-1 rounded-lg border-2 border-darkComic">
+                    CASILLA 4
+                </span>
+                <h3 class="font-comic text-2xl md:text-3xl font-black text-darkComic">
+                    Póliza Estudiantil (Seguro de Accidentes)
+                </h3>
+            </div>
+
+            <p class="text-sm text-gray-800 font-medium mb-4">
+                Todos los aprendices SENA matriculados cuentan con el amparo del <b>Seguro de Accidentes Personales</b> durante sus actividades lectivas y prácticas.
+            </p>
+
+            <div class="space-y-3 mb-4 text-xs md:text-sm">
+                <div class="flex items-start gap-3 bg-green-50 p-3 rounded-xl border-2 border-darkComic">
+                    <i class="fa-solid fa-truck-medical text-senaGreen text-xl mt-0.5"></i>
+                    <div>
+                        <h5 class="font-comic font-bold text-darkComic">Servicio de Ambulancia 24/7</h5>
+                        <p class="text-xs text-gray-600">Traslado de emergencia médica desde el lugar del evento hacia la clínica u hospital.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 bg-green-50 p-3 rounded-xl border-2 border-darkComic">
+                    <i class="fa-solid fa-notes-medical text-senaGreen text-xl mt-0.5"></i>
+                    <div>
+                        <h5 class="font-comic font-bold text-darkComic">Atención Médica y Urgencias</h5>
+                        <p class="text-xs text-gray-600">Gastos médicos, quirúrgicos, farmacéuticos y hospitalización derivados de un accidente.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 bg-green-50 p-3 rounded-xl border-2 border-darkComic">
+                    <i class="fa-solid fa-ribbon text-senaGreen text-xl mt-0.5"></i>
+                    <div>
+                        <h5 class="font-comic font-bold text-darkComic">Invalidez o Fallecimiento Accidental</h5>
+                        <p class="text-xs text-gray-600">Amparo económico directo para el aprendiz o sus beneficiarios en casos severos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-darkComic text-white p-3 rounded-xl text-xs flex flex-col sm:flex-row items-center justify-between gap-2">
+                <span>¿Dudas sobre la aseguradora vigente?</span>
+                <a href="https://centrodeserviciosygestionempresarial.blogspot.com/2025/09/poliza-de-accidentes-para-aprendices.html" target="_blank" class="bg-popYellow text-darkComic font-bold px-3 py-1.5 rounded hover:bg-popCyan transition-colors">
+                    Ver Normativa y Póliza SENA
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: ZONA SEGURA -->
+    <div id="modal-zona-segura" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border-8 border-darkComic rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-comic-xl animate-pop relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-zona-segura')" class="absolute top-4 right-4 bg-popPink text-white font-black w-10 h-10 rounded-full border-4 border-darkComic hover:bg-red-600 transition-colors flex items-center justify-center text-xl shadow-comic">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-popCyan text-darkComic font-comic text-sm font-black px-3 py-1 rounded-lg border-2 border-darkComic">
+                    CASILLA 5
+                </span>
+                <h3 class="font-comic text-2xl md:text-3xl font-black text-darkComic">
+                    Línea Zona Segura & Salud SENA
+                </h3>
+            </div>
+
+            <p class="text-sm text-gray-800 font-medium mb-4">
+                Línea estratégica orientada a brindar primeros auxilios emocionales, cuidado físico y prevención integral de la salud en la comunidad educativa.
+            </p>
+
+            <ul class="space-y-2 mb-6 text-xs md:text-sm">
+                <li class="bg-cyan-50 p-3 rounded-xl border-2 border-darkComic flex items-center gap-2">
+                    <i class="fa-solid fa-heart-pulse text-popPink text-lg"></i>
+                    <span>Promoción de prácticas saludables y prevención de la enfermedad.</span>
+                </li>
+                <li class="bg-cyan-50 p-3 rounded-xl border-2 border-darkComic flex items-center gap-2">
+                    <i class="fa-solid fa-comments text-popPurple text-lg"></i>
+                    <span>Primeros auxilios psicológicos y desarrollo de habilidades blandas.</span>
+                </li>
+                <li class="bg-cyan-50 p-3 rounded-xl border-2 border-darkComic flex items-center gap-2">
+                    <i class="fa-solid fa-masks-theater text-popOrange text-lg"></i>
+                    <span>Fomento del arte, la cultura y el aprovechamiento creativo del tiempo libre.</span>
+                </li>
+            </ul>
+
+            <!-- ENLACE REAL AL PORTAL DE BIENESTAR SENA -->
+            <div class="bg-popPurple/20 border-4 border-darkComic p-4 rounded-2xl text-center">
+                <p class="font-comic font-bold text-darkComic text-xs md:text-sm mb-2">
+                    Conoce más servicios en la página oficial de Bienestar SENA:
+                </p>
+                <a 
+                    href="https://www.sena.edu.co/la-entidad/familia-sena/bienestar-aprendiz" 
+                    target="_blank" 
+                    class="inline-block bg-popPurple hover:bg-purple-700 text-white font-comic font-black text-xs md:text-sm py-2.5 px-5 rounded-xl border-4 border-darkComic shadow-comic transition-all"
+                >
+                    🌐 IR AL SITIO WEB BIENESTAR SENA
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 6: GIMNASIO Y DEPORTE -->
+    <div id="modal-gimnasio" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border-8 border-darkComic rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-comic-xl animate-pop relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-gimnasio')" class="absolute top-4 right-4 bg-popPink text-white font-black w-10 h-10 rounded-full border-4 border-darkComic hover:bg-red-600 transition-colors flex items-center justify-center text-xl shadow-comic">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-popYellow text-darkComic font-comic text-sm font-black px-3 py-1 rounded-lg border-2 border-darkComic">
+                    CASILLA 6
+                </span>
+                <h3 class="font-comic text-2xl md:text-3xl font-black text-darkComic">
+                    Gimnasio & Actividad Física SENA
+                </h3>
+            </div>
+
+            <p class="text-sm text-gray-800 font-medium mb-4">
+                Acceso gratuito a las instalaciones deportivas del Centro de Formación para fortalecer el acondicionamiento físico, salud mental y calidad de vida.
+            </p>
+
+            <div class="bg-yellow-100 border-4 border-darkComic p-5 rounded-2xl mb-4 text-center shadow-comic">
+                <i class="fa-solid fa-dumbbell text-5xl text-popOrange mb-3"></i>
+                <h4 class="font-comic font-black text-xl text-darkComic mb-1">
+                    ¡Agenda tu Cupo en el Gimnasio!
+                </h4>
+                <p class="text-xs text-gray-700 mb-4">
+                    Haz clic en el enlace oficial para ingresar al portal de reserva de horarios y registro deportivo.
+                </p>
+                
+                <!-- ENLACE REAL DEL SITIO OFICIAL -->
+                <a 
+                    href="https://senafitnes.site/" 
+                    target="_blank" 
+                    class="inline-block bg-popOrange hover:bg-orange-600 text-white font-comic font-black text-sm py-3 px-6 rounded-xl border-4 border-darkComic shadow-comic transition-all"
+                >
+                    🏋️ INSCRIPCIÓN GIMNASIO SENA OFICIAL
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT DE INTERACCIONES Y BUSCADOR -->
+    <script>
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('backdrop-blur-sm')) {
+                event.target.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.classList.add('ring-8', 'ring-popYellow');
+                setTimeout(() => {
+                    element.classList.remove('ring-8', 'ring-popYellow');
+                }, 1500);
+            }
+        }
+
+        function searchCards() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.attraction-card');
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
